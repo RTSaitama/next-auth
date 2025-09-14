@@ -1,5 +1,5 @@
-import { AuthForm } from "./components/AuthForm";
-import { Footer } from "./components/Footer";
+import { AuthForm } from "./components/authForm";
+import { Footer } from "./components/footer";
 
 export default function Home() {
   return (
