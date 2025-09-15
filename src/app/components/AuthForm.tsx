@@ -1,35 +1,6 @@
-'use client'
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import type { loginData } from "./zodSchema";
-import { loginSchema } from "./zodSchema";
- 
-
-
+ import { login } from '@/app/lib/actions'
 
 export const AuthForm = () => {
-
-const onSubmit = async (data: loginData) => {
-  const res = await fetch('/api/auth/signin', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(data),
-  });
-  if (!res.ok) {
-    throw new Error('Failed to submit form');
-  }
-  return res.json().then((data) => {
-    console.log(data.message);
-    return { message: data.message
-    }
-  })
-}
-  const form = useForm<loginData>({
-    resolver: zodResolver(loginSchema),
-  })
-
   return (
     <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
       <div className="flex min-h-full flex-col justify-center px-6 py-12 lg:px-8">
@@ -40,23 +11,22 @@ const onSubmit = async (data: loginData) => {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <form action={login} className="space-y-6">
             <div>
-              <label htmlFor="email" className="block text-sm/6 font-medium text-gray-100">
-                Email address or login
+              <label htmlFor="identifier" className="block text-sm/6 font-medium text-gray-100">
+                Login or Email
               </label>
               <div className="mt-2">
                 <input
-                  {...form.register("identifier")}
                   id="identifier"
-                  type="text"
                   name="identifier"
+                  type="text"
                   required
-                  autoComplete="identifier"
+                  minLength={3}
+                  autoComplete="username"
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                  placeholder="Enter login or email"
                 />
-                  {form.formState.errors.identifier && <span>{form.formState.errors.identifier.message}</span>}
-
               </div>
             </div>
 
@@ -73,15 +43,15 @@ const onSubmit = async (data: loginData) => {
               </div>
               <div className="mt-2">
                 <input
-                 {...form.register("password")}
                   id="password"
-                  type="password"
                   name="password"
+                  type="password"
                   required
+                  minLength={8}
                   autoComplete="current-password"
                   className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6"
+                  placeholder="Enter password"
                 />
-                  {form.formState.errors.password && <span>{form.formState.errors.password.message}</span>}
               </div>
             </div>
 
